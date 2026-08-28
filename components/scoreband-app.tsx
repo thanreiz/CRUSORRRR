@@ -69,6 +69,10 @@ export function ScorebandApp() {
     setSelected((current) => {
       if (current.includes(id)) {
         if (current.length === 1) return current;
+        if (solo === id) {
+          setSolo(null);
+          playerRef.current?.setSolo(null);
+        }
         return current.filter((item) => item !== id);
       }
       return [...current, id];
@@ -287,7 +291,7 @@ export function ScorebandApp() {
                 Stop
               </Button>
               <p className="text-xs text-muted-foreground sm:ml-2">
-                Playback loops the 8-bar chart. Mute or solo a stand to audition parts.
+                Playback loops the full chart. Mute or solo a stand to audition parts.
               </p>
             </div>
           </div>
@@ -482,7 +486,7 @@ export function ScorebandApp() {
               </div>
               <CardTitle className="font-heading text-2xl">{demo.title}</CardTitle>
               <CardDescription>
-                {demo.key} {demo.mode} · {demo.timeSignature} · 8 bars · 8 stands
+                {demo.key} {demo.mode} · {demo.timeSignature} · {demo.parts[0]?.measures.length ?? demo.bars ?? 16} bars · 8 stands
               </CardDescription>
             </CardHeader>
             <CardContent className="mt-auto">

@@ -1,4 +1,4 @@
-import { INSTRUMENT_IDS, isInstrumentId } from "./instruments";
+import { INSTRUMENT_IDS } from "./instruments";
 import {
   BEATS,
   chordTones,
@@ -128,12 +128,6 @@ function slugify(title: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
   return slug || "song";
-}
-
-function resolveIds(selectedIds: string[]): InstrumentId[] {
-  const requested = selectedIds.filter(isInstrumentId);
-  const ids = requested.length > 0 ? requested : [...INSTRUMENT_IDS];
-  return INSTRUMENT_IDS.filter((id) => ids.includes(id));
 }
 
 function fillRhythm(beats: number, cells: number[][], rng: () => number): number[] {
@@ -538,8 +532,9 @@ function saxFromMelody(
 }
 
 /**
- * Deterministic arrangement from a string seed. Always returns playable parts
- * for the selected instruments (all eight if `selectedIds` is empty).
+ * Deterministic arrangement from a string seed. Always returns all eight
+ * parts so the studio can show/hide stands after ingest. `selectedIds` is
+ * kept for callers; lineup filtering happens in the UI.
  */
 export function arrangeFromSeed(
   seed: string,
@@ -560,7 +555,8 @@ export function arrangeFromSeed(
   const bars = clamp(options?.bars ?? pick(rng, barChoices), 8, 16);
   const preferFlats = keyPrefersFlats(key);
   const scale = scaleFor(key, mode);
-  const ids = resolveIds(selectedIds);
+  void selectedIds;
+  const ids = INSTRUMENT_IDS;
   const degrees = degreesFor(rng, style.id, bars);
   const melody = makeMelody(rng, scale, mode, bars, beats, 4, preferFlats);
 

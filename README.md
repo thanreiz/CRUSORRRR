@@ -8,7 +8,7 @@ Scoreband is a rehearsal-room web app for a buildathon demo. It engraves a staff
 
 - Open one of three original demo songs and hear every part
 - Toggle vocal, guitars, bass, drums, piano, alto sax, and trumpet
-- Mute or solo a stand while the 8-bar chart loops
+- Mute or solo a stand while the chart loops
 - Paste a YouTube URL — the title is read from YouTube, then a deterministic arrangement is written from the video id
 - Drop an MP3 — tempo is guessed from onsets, then the band is voiced so you still get sheets
 - Download ABC notation or print the chart

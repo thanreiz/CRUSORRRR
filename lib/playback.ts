@@ -24,13 +24,13 @@ export type ScorePlayer = {
   isPlaying: () => boolean;
 };
 
-function drumKind(pitchName: string): "kick" | "snare" | "hat" | "open" | "tom" | "crash" {
+function drumKind(pitchName: string): "kick" | "snare" | "hat" | "open" | "tom" | "crash" | "ride" {
   if (pitchName.startsWith("C2")) return "kick";
   if (pitchName.startsWith("D2")) return "snare";
   if (pitchName.startsWith("G#2")) return "open";
   if (pitchName.startsWith("F#2")) return "hat";
   if (pitchName.startsWith("C#3")) return "crash";
-  if (pitchName.startsWith("A3")) return "hat";
+  if (pitchName.startsWith("A3")) return "ride";
   return "tom";
 }
 
@@ -90,6 +90,9 @@ function buildKit(Tone: ToneModule, id: InstrumentId): ChannelKit {
               break;
             case "crash":
               crash.triggerAttackRelease(0.6, time, vel * 0.45);
+              break;
+            case "ride":
+              crash.triggerAttackRelease(Math.max(0.28, _duration), time, vel * 0.28);
               break;
             default:
               tom.triggerAttackRelease(item, 0.18, time, vel);
@@ -234,8 +237,9 @@ export function createScorePlayer(): ScorePlayer {
   let ToneRef: ToneModule | null = null;
 
   const applyMutes = () => {
+    const soloKit = solo !== null && kits[solo] ? solo : null;
     (Object.entries(kits) as [InstrumentId, ChannelKit][]).forEach(([id, kit]) => {
-      const silent = muted.has(id) || (solo !== null && solo !== id);
+      const silent = muted.has(id) || (soloKit !== null && soloKit !== id);
       kit.gain.gain.value = silent ? 0 : 0.85;
     });
   };
@@ -250,6 +254,8 @@ export function createScorePlayer(): ScorePlayer {
     scheduled = [];
     Object.values(kits).forEach((kit) => kit?.dispose());
     kits = {};
+    muted.clear();
+    solo = null;
     playing = false;
   };
 
