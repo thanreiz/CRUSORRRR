@@ -13,11 +13,11 @@ function drumGroove(beats: 3 | 4, count: number): Measure[] {
   if (beats === 3) {
     const ride = parseMeasure(
       3,
-      "C2:1:0.85 A2:0.5:0.55 A2:0.5:0.45 A2:1:0.55",
+      "C2:1:0.85 A3:0.5:0.55 A3:0.5:0.45 A3:1:0.55",
     );
     const crash = parseMeasure(
       3,
-      "C#3:1:0.95 A2:0.5:0.55 A2:0.5:0.45 A2:1:0.55",
+      "C#3:1:0.95 A3:0.5:0.55 A3:0.5:0.45 A3:1:0.55",
     );
     const fill = parseMeasure(3, "C2:1:0.9 A2:0.5:0.75 D2:0.5:0.85 C#3:1:0.9");
     return Array.from({ length: count }, (_, i) => {
@@ -54,12 +54,12 @@ function drumGroove(beats: 3 | 4, count: number): Measure[] {
 }
 
 function makeSong(
-  meta: Omit<Song, "parts">,
+  meta: Omit<Song, "parts" | "bars">,
   partsById: Record<InstrumentId, Measure[]>,
 ): Song {
   const parts = INSTRUMENT_IDS.map((id) => part(id, partsById[id]));
   assertAlignedParts(parts, BEATS[meta.timeSignature]);
-  return { ...meta, parts };
+  return { ...meta, bars: parts[0]?.measures.length ?? 0, parts };
 }
 
 const midnightFire = makeSong(

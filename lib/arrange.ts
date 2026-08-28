@@ -335,7 +335,7 @@ function drumBar(beats: number, styleId: string, index: number, bars: number): M
   const kick = n("C2", 0.5, 1);
   const snare = n("D2", 0.5, 0.9);
   const hat = n("F#2", 0.5, 0.4);
-  const ride = n("A2", 1, 0.55);
+  const ride = n("A3", 1, 0.55);
   const crash = n("C#3", 0.5, 0.95);
   const tom = n("A2", 0.5, 0.75);
   const isFill = (index + 1) % 8 === 0 || index === bars - 1;
@@ -349,8 +349,8 @@ function drumBar(beats: number, styleId: string, index: number, bars: number): M
       return {
         notes: [
           isCrash ? n("C2", 1, 0.9) : n("C2", 1, 0.8),
-          n("A2", 0.5, 0.55),
-          n("A2", 0.5, 0.45),
+          n("A3", 0.5, 0.55),
+          n("A3", 0.5, 0.45),
           ride,
         ],
       };
