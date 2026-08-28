@@ -18,7 +18,7 @@ import { DEMO_SONGS } from "@/lib/demos";
 import { INSTRUMENTS } from "@/lib/instruments";
 import { createScorePlayer, type ScorePlayer } from "@/lib/playback";
 import type { InstrumentId, Song } from "@/lib/types";
-import { fetchYoutubeMeta } from "@/lib/youtube";
+import { fetchYoutubeMeta, safeHttpsUrl } from "@/lib/youtube";
 import { ScoreSheet } from "@/components/score-sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -232,16 +232,17 @@ export function ScorebandApp() {
   }
 
   if (screen === "studio" && song) {
+    const thumbnail = safeHttpsUrl(song.thumbnail);
     return (
       <div className="flex flex-1 flex-col">
         <header className="border-b border-border/80 bg-background/80 backdrop-blur">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex min-w-0 items-start gap-3">
-                {song.thumbnail ? (
+                {thumbnail ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={song.thumbnail}
+                    src={thumbnail}
                     alt=""
                     className="hidden h-16 w-24 rounded-lg object-cover sm:block"
                   />

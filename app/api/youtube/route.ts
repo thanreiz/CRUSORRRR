@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { extractYoutubeId } from "@/lib/youtube";
+import { extractYoutubeId, safeHttpsUrl } from "@/lib/youtube";
 
 export async function GET(request: Request) {
   const raw = new URL(request.url).searchParams.get("url") ?? "";
@@ -28,7 +28,8 @@ export async function GET(request: Request) {
         title: data.title ?? "Untitled video",
         author: data.author_name ?? "YouTube",
         thumbnail:
-          data.thumbnail_url ?? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+          safeHttpsUrl(data.thumbnail_url) ??
+          `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
       });
     }
     return NextResponse.json({

@@ -154,6 +154,10 @@ function padMeasures(measures: Measure[], count: number, beats: number): Measure
   return [...measures, ...extra];
 }
 
+function abcHeaderText(value: string): string {
+  return value.replace(/[\r\n]+/g, " ").trim();
+}
+
 function abcKeyHeader(key: string, mode: Song["mode"]): string {
   if (mode === "minor") {
     return `${key}min`;
@@ -179,8 +183,8 @@ export function songToAbc(song: Song, selectedInstrumentIds: string[]): string {
 
   const lines: string[] = [
     "X:1",
-    `T:${song.title}`,
-    `C:${song.artist}`,
+    `T:${abcHeaderText(song.title)}`,
+    `C:${abcHeaderText(song.artist)}`,
     `M:${song.timeSignature}`,
     `L:${l}`,
     `Q:1/4=${Math.round(song.tempo)}`,

@@ -39,6 +39,17 @@ export function extractYoutubeId(input: string): string | null {
   return null;
 }
 
+export function safeHttpsUrl(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== "https:") return undefined;
+    return parsed.href;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function fetchYoutubeMeta(rawUrl: string): Promise<YoutubeMeta> {
   const response = await fetch(
     `/api/youtube?url=${encodeURIComponent(rawUrl.trim())}`,
