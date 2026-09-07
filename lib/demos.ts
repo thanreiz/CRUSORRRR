@@ -1,3 +1,4 @@
+import { arrangeFromSeed } from "./arrange";
 import { INSTRUMENT_IDS } from "./instruments";
 import {
   assertAlignedParts,
@@ -517,3 +518,60 @@ export const DEMO_SONGS: Song[] = [midnightFire, harborLights, wireframeHeart];
 export function getDemo(id: string): Song | undefined {
   return DEMO_SONGS.find((song) => song.id === id);
 }
+
+/** Original OPM / Tagalog-style charts (not covers of commercial recordings). */
+export const OPM_DEMOS: Song[] = [
+  arrangeFromSeed("opm-bukas-pa-rin-v1", "Bukas Pa Rin", [], {
+    artist: "Scoreband OPM",
+    style: "opm ballad",
+    key: "G",
+    mode: "major",
+    tempo: 76,
+    bars: 16,
+    source: "demo",
+  }),
+  arrangeFromSeed("opm-jeepney-run-v1", "Jeepney Run", [], {
+    artist: "Scoreband OPM",
+    style: "manila disco",
+    key: "C",
+    mode: "major",
+    tempo: 116,
+    bars: 16,
+    source: "demo",
+  }),
+  arrangeFromSeed("opm-lamig-ng-ulan-v1", "Lamig ng Ulan", [], {
+    artist: "Scoreband OPM",
+    style: "opm pop-rock",
+    key: "D",
+    mode: "major",
+    tempo: 98,
+    bars: 16,
+    source: "demo",
+  }),
+];
+
+export type BandStressTest = {
+  id: string;
+  title: string;
+  subtitle: string;
+  youtubeUrl: string;
+  style: string;
+  bars: number;
+  tempo?: number;
+};
+
+/**
+ * Full-band stress tests that pull YouTube metadata, then write an original
+ * Scoreband chart. Not licensed transcriptions of the commercial recordings.
+ */
+export const BAND_STRESS_TESTS: BandStressTest[] = [
+  {
+    id: "bohemian-rhapsody",
+    title: "Bohemian Rhapsody",
+    subtitle: "Majestic full-band stress test · Queen",
+    youtubeUrl: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+    style: "opera rock",
+    bars: 16,
+    tempo: 80,
+  },
+];

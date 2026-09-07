@@ -89,6 +89,38 @@ const STYLE_TABLE: {
     mode: "minor",
     progression: "rock",
   },
+  {
+    id: "opm ballad",
+    match: ["opm", "ballad", "tagalog", "harana", "kundiman"],
+    time: "4/4",
+    tempo: [68, 84],
+    mode: "major",
+    progression: "pop",
+  },
+  {
+    id: "manila disco",
+    match: ["manila", "disco", "jeepney"],
+    time: "4/4",
+    tempo: [108, 124],
+    mode: "major",
+    progression: "funk",
+  },
+  {
+    id: "opm pop-rock",
+    match: ["pop-rock", "opm rock", "filipino"],
+    time: "4/4",
+    tempo: [92, 112],
+    mode: "major",
+    progression: "rock",
+  },
+  {
+    id: "opera rock",
+    match: ["opera", "rhapsody", "majestic", "queen", "theatrical"],
+    time: "4/4",
+    tempo: [72, 88],
+    mode: "major",
+    progression: "rock",
+  },
 ];
 
 const KEY_CHOICES = ["C", "G", "D", "A", "F", "Bb", "Eb"] as const;

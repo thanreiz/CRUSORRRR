@@ -14,7 +14,12 @@ import {
 import { toast } from "sonner";
 import { downloadAbc, songToAbc } from "@/lib/abc";
 import { analyzeAudioToSong, arrangeFromSeed } from "@/lib/arrange";
-import { DEMO_SONGS } from "@/lib/demos";
+import {
+  BAND_STRESS_TESTS,
+  DEMO_SONGS,
+  OPM_DEMOS,
+  type BandStressTest,
+} from "@/lib/demos";
 import { INSTRUMENTS } from "@/lib/instruments";
 import { createScorePlayer, type ScorePlayer } from "@/lib/playback";
 import type { InstrumentId, Song } from "@/lib/types";
@@ -110,15 +115,25 @@ export function ScorebandApp() {
     await openSong(next);
   }
 
-  async function loadYoutube() {
+  async function loadYoutube(options?: {
+    url?: string;
+    style?: string;
+    bars?: number;
+    tempo?: number;
+  }) {
+    const url = options?.url ?? youtubeUrl;
     try {
-      const meta = await runLoading(async () => fetchYoutubeMeta(youtubeUrl));
+      const meta = await runLoading(async () => fetchYoutubeMeta(url));
       const next = arrangeFromSeed(meta.videoId, meta.title, selected, {
         artist: meta.author,
         source: "youtube",
         youtubeId: meta.videoId,
         thumbnail: meta.thumbnail,
+        style: options?.style,
+        bars: options?.bars,
+        tempo: options?.tempo,
       });
+      setYoutubeUrl(url);
       await openSong(next);
     } catch (err) {
       setScreen("home");
@@ -127,6 +142,15 @@ export function ScorebandApp() {
       setError(message);
       toast.error(message);
     }
+  }
+
+  async function loadBandStressTest(test: BandStressTest) {
+    await loadYoutube({
+      url: test.youtubeUrl,
+      style: test.style,
+      bars: test.bars,
+      tempo: test.tempo,
+    });
   }
 
   async function loadFile(file: File) {
@@ -385,7 +409,7 @@ export function ScorebandApp() {
         <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
           Paste a YouTube link or drop an MP3. Pick who is on the gig. Scoreband writes a
           playable chart for each stand — then you can hear the arrangement before anyone
-          sits down.
+          sits down. Built for OPM rehearsals and full-band stress tests.
         </p>
       </div>
 
@@ -468,11 +492,69 @@ export function ScorebandApp() {
 
       <Separator className="my-10" />
 
+      <div className="mb-4">
+        <h2 className="font-heading text-2xl">OPM / Tagalog demos</h2>
+        <p className="text-sm text-muted-foreground">
+          Original Filipino-flavored charts for the band — ballad, Manila disco, and pop-rock. Not covers of commercial OPM hits.
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        {OPM_DEMOS.map((demo) => (
+          <Card key={demo.id} className="flex flex-col">
+            <CardHeader>
+              <div className="flex items-center justify-between gap-2">
+                <Badge variant="secondary">{demo.style}</Badge>
+                <span className="text-xs text-muted-foreground">{demo.tempo} BPM</span>
+              </div>
+              <CardTitle className="font-heading text-2xl">{demo.title}</CardTitle>
+              <CardDescription>
+                {demo.artist} · {demo.key} {demo.mode} ·{" "}
+                {demo.parts[0]?.measures.length ?? demo.bars ?? 16} bars
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="mt-auto">
+              <Button className="w-full" onClick={() => void loadDemo(demo)}>
+                <Play />
+                Open {demo.title}
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="mt-12 mb-4">
+        <h2 className="font-heading text-2xl">Majestic band test</h2>
+        <p className="text-sm text-muted-foreground">
+          Pulls the YouTube title, then writes a theatrical Scoreband chart for the full lineup. This is a stress test — not Queen&apos;s licensed arrangement.
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {BAND_STRESS_TESTS.map((test) => (
+          <Card key={test.id} className="border-primary/40">
+            <CardHeader>
+              <Badge>Opera rock · 16 bars · 8 stands</Badge>
+              <CardTitle className="font-heading text-2xl">{test.title}</CardTitle>
+              <CardDescription>{test.subtitle}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full" size="lg" onClick={() => void loadBandStressTest(test)}>
+                <Play />
+                Run majestic test
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Separator className="my-10" />
+
       <div className="mb-4 flex items-end justify-between gap-3">
         <div>
-          <h2 className="font-heading text-2xl">Play a demo first</h2>
+          <h2 className="font-heading text-2xl">Studio warm-ups</h2>
           <p className="text-sm text-muted-foreground">
-            Three original charts. Open one, mute drums, solo the bass — the sheets and the playback stay in lockstep.
+            Original English demos if you want a quick funk, waltz, or indie pass first.
           </p>
         </div>
       </div>

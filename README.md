@@ -22,7 +22,9 @@ npm install
 npm run dev
 ```
 
-Open [http://127.0.0.1:43217](http://127.0.0.1:43217). Click **Open Midnight Fire**, then **Play band**. Mute drums and solo the bass to confirm each instrument has its own voice.
+Open [http://127.0.0.1:43217](http://127.0.0.1:43217). Start with an OPM demo (**Bukas Pa Rin**, **Jeepney Run**, or **Lamig ng Ulan**), or run the **Bohemian Rhapsody** majestic band test. Mute drums and solo the bass to confirm each instrument has its own voice.
+
+Original OPM charts are Scoreband arrangements — not licensed covers. The majestic Queen test pulls YouTube metadata and writes a theatrical generated chart for rehearsal stress-testing.
 
 ## Stack
 
